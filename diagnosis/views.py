@@ -4,6 +4,7 @@ from django.core.files.storage import default_storage
 import os
 from django.conf import settings
 import requests
+
 def diagnosis_form(request):
     return render(request, 'diagnosis.html')
 

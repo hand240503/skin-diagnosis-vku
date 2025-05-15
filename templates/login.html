@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Phòng Khám</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow p-4" style="width: 350px;">
+            <h3 class="text-center mb-4">Đăng Nhập</h3>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- Username input -->
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Tên đăng nhập</label>
+                    <input type="text" name="username" class="form-control" id="id_username" placeholder="Nhập tên đăng nhập"
+                        required autofocus />
+                </div>
+
+                <!-- Password input -->
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Mật khẩu</label>
+                    <input type="password" name="password" class="form-control" id="id_password" placeholder="Nhập mật khẩu"
+                        required />
+                </div>
+
+                <!-- Display form errors -->
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        Tên đăng nhập hoặc mật khẩu không đúng.
+                    </div>
+                {% endif %}
+
+                <!-- Messages from Django messages framework -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS bundle (Popper + Bootstrap JS) -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

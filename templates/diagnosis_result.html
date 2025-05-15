@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kết quả chuẩn đoán</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Kết quả chẩn đoán bệnh về da</h2>
+
+        <div class="mb-4">
+            <p><strong>Kết quả:</strong> {{ result }}</p>
+        </div>
+
+        {% if recommendation %}
+        <div class="mb-4">
+            <h5 class="text-success">Khuyến cáo từ AI :</h5>
+            <div class="border rounded p-3 bg-light">
+                <p style="white-space: pre-wrap;">{{ recommendation }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'diagnosis_form' %}" class="btn btn-primary">Chẩn đoán ảnh khác</a>
+    </div>
+</body>
+
+</html>

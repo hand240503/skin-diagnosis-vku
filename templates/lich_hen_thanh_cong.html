@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Đặt lịch khám thành công{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8" style="padding-top: 100px;">
+                <div class="card shadow-sm p-4 text-center">
+                    <h2 class="mb-4">Cảm ơn bạn đã đặt lịch khám!</h2>
+                    {% if email %}
+                    <p>Chúng tôi đã nhận được yêu cầu đặt lịch khám của bạn. Chúng tôi sẽ gửi mail tới địa chỉ
+                        <strong>{{ email }}</strong> sớm nhất.</p>
+                    {% else %}
+                    <p>Chúng tôi đã nhận được yêu cầu đặt lịch khám của bạn. Vui lòng kiểm tra email để biết thêm chi
+                        tiết.</p>
+                    {% endif %}
+                    <a href="/" class="btn btn-primary mt-3">Quay về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

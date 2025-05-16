@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Đặt Lịch Hẹn - Phòng Khám Da Liễu{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8" style="padding-top: 100px;">
+                <div class="card shadow-sm p-4">
+                    <h2 class="text-center mb-4">Đặt Lịch Hẹn Với Bác Sĩ</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="ho_ten" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="ho_ten" name="ho_ten"
+                                placeholder="Nhập họ và tên" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="chuyen_khoa" class="form-label">Chuyên Khoa</label>
+                            <select class="form-select" id="chuyen_khoa" name="chuyen_khoa" required>
+                                <option value="" selected>Chọn chuyên khoa</option>
+                                {% for ck in chuyen_khoa_list %}
+                                <option value="{{ ck.ma_chuyen_khoa }}">{{ ck.ten_chuyen_khoa }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ngay_kham" class="form-label">Ngày Khám</label>
+                            <input type="date" class="form-control" id="ngay_kham" name="ngay_kham" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="buoi_kham" class="form-label">Buổi Khám</label>
+                            <select class="form-select" id="buoi_kham" name="buoi_kham" required>
+                                <option value="" selected>Chọn buổi khám</option>
+                                <option value="Sáng">Sáng</option>
+                                <option value="Chiều">Chiều</option>
+                                <option value="Tối">Tối</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="trieu_chung" class="form-label">Triệu Chứng</label>
+                            <textarea class="form-control" id="trieu_chung" name="trieu_chung" rows="3"
+                                placeholder="Mô tả triệu chứng" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Gửi Yêu Cầu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Danh Sách Lịch Hẹn - Phòng Khám Da Liễu{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12" style="padding-top: 100px;">
+                <div class="card shadow-sm p-4">
+                    <h2 class="text-center mb-3">Danh Sách Lịch Hẹn Của Bạn</h2>
+                    <p class="text-center mb-4 text-muted fst-italic" style="font-size: 1.1rem;">
+                        Lịch làm việc của phòng khám: <strong>07:00 - 12:00</strong> và <strong>13:00 - 17:00</strong>
+                        hàng ngày.
+                    </p>
+
+                    {% if lich_kham_list %}
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Họ và Tên</th>
+                                <th>Email</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Chuyên Khoa</th>
+                                <th>Ngày Khám</th>
+                                <th>Buổi Khám</th>
+                                <th>Triệu Chứng</th>
+                                <th>Trạng Thái</th>
+                                <th>Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lich in lich_kham_list %}
+                            <tr>
+                                <td>{{ lich.ho_ten }}</td>
+                                <td>{{ lich.email }}</td>
+                                <td>{{ lich.phone }}</td>
+                                <td>{{ lich.chuyen_khoa }}</td>
+                                <td>{{ lich.ngay_kham|date:"d/m/Y" }}</td>
+                                <td>{{ lich.buoi_kham }}</td>
+                                <td>{{ lich.trieu_chung }}</td>
+                                <td>
+                                    {% if lich.type == 0 %}
+                                    <span class="badge bg-warning text-dark">Chưa xác nhận</span>
+                                    {% elif lich.type == 1 %}
+                                    <span class="badge bg-success">Đã xác nhận</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Đã Hủy</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lich.type == 1 %}
+                                    <a href="" class="btn btn-info btn-sm">Chi tiết</a>
+                                    {% elif lich.type == 0 %}
+                                    <form action="{% url 'huy_lich_hen' lich.id %}" method="post"
+                                        style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?');">Hủy</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-center">Bạn chưa có lịch hẹn nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

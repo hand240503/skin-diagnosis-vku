@@ -13,7 +13,12 @@ class LichKham(models.Model):
     trieu_chung = models.TextField()
 
     activation_token = models.CharField(max_length=128, null=True, blank=True)
-    type = models.IntegerField(default=0, choices=[(0, 'Chưa xác nhận'), (1, 'Đã xác nhận')])
+    TYPE_CHOICES = (
+        (0, 'Chưa xác nhận'),
+        (1, 'Đã xác nhận'),
+        (2, 'Đã hủy'),
+    )
+    type = models.IntegerField(choices=TYPE_CHOICES, default=0)
 
     def __str__(self):
         return f"{self.ho_ten} - {self.ngay_kham} - {self.buoi_kham}"

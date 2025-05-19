@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2>Tìm kiếm lịch khám</h2>
+
+    <form method="get" action="." style="padding-top: 100px;" onsubmit="return validateInput()">
+        <div class="mb-3">
+            <label for="contact" class="form-label">Email hoặc số điện thoại:</label>
+            <input type="text" name="contact" id="contact" class="form-control" value="{{ request.GET.contact }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger mt-3">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    {% if lich_kham_list != None %}
+    {% if lich_kham_list %}
+    <h3 class="mt-4">Kết quả tìm kiếm:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Họ và tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Chuyên khoa</th>
+                <th>Ngày khám</th>
+                <th>Buổi khám</th>
+                <th>Triệu chứng</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lich in lich_kham_list %}
+            <tr>
+                <td>{{ lich.ho_ten }}</td>
+                <td>{{ lich.email }}</td>
+                <td>{{ lich.phone }}</td>
+                <td>{{ lich.chuyen_khoa }}</td>
+                <td>{{ lich.ngay_kham|date:"d/m/Y" }}</td>
+                <td>{{ lich.buoi_kham }}</td>
+                <td>{{ lich.trieu_chung }}</td>
+                <td>
+                    {% if lich.type == 0 %}
+                    <span class="badge bg-warning text-dark">Chưa xác nhận</span>
+                    {% elif lich.type == 1 %}
+                    <span class="badge bg-success">Đã xác nhận</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Đã hủy</span>
+                    {% endif %}
+                </td>
+                <!-- <td>
+                    {% if lich.type == 1 %}
+                    <a href="" class="btn btn-info btn-sm">Chi tiết</a>
+                    {% elif lich.type == 0 %}
+                    <form action="{% url 'huy_lich_hen' lich.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?');">Hủy</button>
+                    </form>
+                    {% endif %}
+                </td> -->
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="mt-4">Không tìm thấy lịch khám nào phù hợp.</p>
+    {% endif %}
+    {% endif %}
+    <div class="mt-4 alert alert-info">
+        Vui lòng liên hệ <strong>nhân viên chăm sóc khách hàng</strong> nếu có thắc mắc về lịch khám hoặc dùng tài khoản
+        chúng tôi đã cung cấp để xem chi tiết.
+    </div>
+
+
+</div>
+{% endblock %}
+<script>
+    function validateInput() {
+        const contact = document.getElementById('contact').value.trim();
+        if (contact === '') {
+            alert("Vui lòng nhập Email hoặc Số điện thoại để tìm kiếm.");
+            return false;
+        }
+
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+        const isPhone = /^\d{8,12}$/.test(contact); 
+
+        if (!isEmail && !isPhone) {
+            alert("Vui lòng nhập đúng định dạng Email hoặc Số điện thoại (8–12 chữ số).");
+            return false;
+        }
+
+        return true;
+    }
+</script>

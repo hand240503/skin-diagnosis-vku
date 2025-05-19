@@ -64,14 +64,16 @@
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch Vụ</a>
             <div class="dropdown-menu m-0">
-              <a href="appointment.html" class="dropdown-item">Appointment</a>
-              <a href="feature.html" class="dropdown-item">Features</a>
-              <a href="blog.html" class="dropdown-item">Our Blog</a>
-              <a href="team.html" class="dropdown-item">Our Team</a>
-              <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-              <a href="404.html" class="dropdown-item">404 Page</a>
+              {% if user.is_authenticated %}
+              <a href="{% url 'lich_kham_nguoi_dung' %}" class="dropdown-item">Lịch Hẹn Của Bạn</a>
+              <a href="{% url 'logout' %}" class="dropdown-item">Đăng Xuất</a>
+              {% else %}
+              <a href="{% url 'login' %}" class="dropdown-item">Đăng Nhập</a>
+              {% endif %}
+              <a href="{% url 'tim_kiem_lich' %}" class="dropdown-item">Tìm kiếm lịch hẹn</a>
             </div>
           </div>
+
         </div>
 
         <!-- Đặt lịch hẹn chuyển về ngay trước nút đăng nhập/đăng xuất -->
@@ -897,7 +899,8 @@
   <!-- Back to Top -->
   <!-- <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a> -->
   <!-- Nút mở form -->
-  <button id="openChatBtn" class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow text-center"
+  <button id="openChatBtn"
+    class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow text-center d-none"
     style="width: 60px; height: 60px; z-index:1050; line-height: 60px; padding: 0;"><i
       class="fas fa-comments fa-lg text-white"></i></button>
 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Thông báo hủy lịch khám - Phòng Khám Da Liễu</title>
+    <style>
+        /* Reset cơ bản cho email */
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #212529;
+        }
+
+        .container {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 30px auto;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #dc3545;
+            /* Màu đỏ báo hủy */
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #6c757d;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Thông báo hủy lịch khám</h2>
+        <p>Xin chào <strong>{{ ho_ten }}</strong>,</p>
+        <p>Lịch khám của bạn đã được <strong>hủy thành công</strong>.</p>
+
+        <p><strong>Thông tin lịch khám:</strong></p>
+        <ul>
+            <li><strong>Ngày khám:</strong> {{ ngay_kham }}</li>
+            <li><strong>Buổi khám:</strong> {{ buoi_kham }}</li>
+            <li><strong>Chuyên khoa:</strong> {{ chuyen_khoa }}</li>
+        </ul>
+
+        <p>Nếu bạn cần hỗ trợ thêm, vui lòng liên hệ với phòng khám.</p>
+
+        <p>Trân trọng,<br />Phòng Khám Da Liễu</p>
+    </div>
+    <div class="footer">
+        &copy; 2025 Phòng Khám Da Liễu. Bản quyền thuộc về Phòng Khám Da Liễu.
+    </div>
+</body>
+
+</html>

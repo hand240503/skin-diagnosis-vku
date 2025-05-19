@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .email-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+            border-radius: 10px;
+            color: #333333;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            font-size: 28px;
+            color: #2e7d32;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 15px auto;
+            width: 100px;
+            height: auto;
+        }
+
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            background-color: #e8f5e9;
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #388e3c;
+        }
+
+        .btn-confirm {
+            display: inline-block;
+            background-color: #2e7d32;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .footer {
+            font-size: 13px;
+            color: #615f5f;
+            margin-top: 30px;
+            text-align: center;
+            border-top: 1px solid #dddddd;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <img src="https://yourclinic.com/logo.png" alt="Phòng Khám Đa Khoa" class="logo" />
+        <div class="header">Xin chào {{ ho_ten }}!</div>
+        <div class="content">
+            <p>Cảm ơn bạn đã đặt lịch khám tại <strong>Phòng Khám Đa Khoa</strong>.</p>
+            <p>Thông tin lịch khám của bạn như sau:</p>
+            <ul>
+                <li><strong>Chuyên khoa:</strong> {{ chuyen_khoa }}</li>
+                <li><strong>Ngày khám:</strong> {{ ngay_kham }}</li>
+                <li><strong>Buổi khám:</strong> {{ buoi_kham }}</li>
+                <li><strong>Số điện thoại:</strong> {{ phone }}</li>
+                <li><strong>Triệu chứng:</strong> {{ trieu_chung }}</li>
+            </ul>
+
+            <!-- Ví dụ nếu bạn muốn thêm nút xác nhận -->
+            <!-- <a href="{{ confirm_url }}" class="btn-confirm">Xác nhận lịch khám</a> -->
+
+            <p>Chúng tôi sẽ liên hệ lại với bạn nếu có thay đổi.</p>
+        </div>
+        <div class="footer">
+            Đây là email tự động từ Phòng Khám Đa Khoa, vui lòng không trả lời lại email này.<br>
+            Địa chỉ: 123 Đường ABC, Quận Cẩm Lệ, TP.Đà Nẵng | Hotline: 0388 529 096
+        </div>
+    </div>
+</body>
+
+</html>

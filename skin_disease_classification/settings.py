@@ -1,15 +1,20 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv  # Thêm import này
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load biến môi trường từ file .env trước khi lấy biến
 load_dotenv(dotenv_path=BASE_DIR / '.env')
 
-# Lấy API key từ biến môi trường
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -19,8 +24,6 @@ SECRET_KEY = 'django-insecure-+!4d(v8wxa259_%hsp^h9c3ed(gk15j%me-y50_sv%3k(@it+e
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# ... phần còn lại giữ nguyên ...
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,6 +37,7 @@ INSTALLED_APPS = [
     'home',
     'login',
     'chuyen_khoa',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +106,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'

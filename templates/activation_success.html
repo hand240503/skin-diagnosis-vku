@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kích hoạt tài khoản thành công</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .note {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        a.button {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Kích hoạt thành công!</h1>
+        <p>Tài khoản của bạn đã được kích hoạt thành công.</p>
+        <p class="note">Vui lòng kiểm tra email của bạn để nhận thông tin đăng nhập và hướng dẫn sử dụng.</p>
+        <a href="{% url 'login' %}" class="button">Đăng nhập ngay</a>
+    </div>
+</body>
+
+</html>

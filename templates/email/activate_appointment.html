@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Xác nhận lịch hẹn</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        {% if success %}
+        <h2>Xác nhận thành công!</h2>
+        <p>Lịch hẹn của bạn với chúng tôi đã được xác nhận.</p>
+        <a href="/" class="btn btn-primary">Về trang chủ</a>
+        {% else %}
+        <h2>Xác nhận thất bại</h2>
+        <p>Mã xác nhận không hợp lệ hoặc lịch hẹn đã được xác nhận trước đó.</p>
+        <a href="/" class="btn btn-danger">Về trang chủ</a>
+        {% endif %}
+    </div>
+</body>
+
+</html>

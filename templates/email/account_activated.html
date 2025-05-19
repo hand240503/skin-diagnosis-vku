@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Kích hoạt tài khoản thành công</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            padding: 30px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #28a745;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .password {
+            font-weight: bold;
+            font-size: 20px;
+            color: #007bff;
+            background-color: #e9f5ff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            letter-spacing: 3px;
+            margin-top: 10px;
+            user-select: all;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Chào {{ ho_ten }},</h1>
+        <p>Tài khoản của bạn với email <strong>{{ email }}</strong> đã được kích hoạt thành công.</p>
+        <p>Mật khẩu tạm thời của bạn là:</p>
+        <div class="password">{{ password }}</div>
+        <p>Vui lòng đăng nhập vào hệ thống và thay đổi mật khẩu ngay để bảo mật tài khoản của bạn.</p>
+
+        <div class="footer">
+            <p>Trân trọng,<br />Đội ngũ hỗ trợ</p>
+        </div>
+    </div>
+</body>
+
+</html>

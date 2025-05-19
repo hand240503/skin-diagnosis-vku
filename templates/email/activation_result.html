@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kích hoạt tài khoản</title>
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 15px;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            margin: auto;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+            margin: 0 auto 25px auto;
+            display: block;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        .message.success {
+            color: #2e7d32;
+        }
+
+        .message.error {
+            color: #d32f2f;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background-color: #2e7d32;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-back:hover {
+            background-color: #27632a;
+        }
+
+        .footer {
+            font-size: 13px;
+            color: #615f5f;
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="https://yourclinic.com/logo.png" alt="Phòng Khám Đa Khoa" class="logo" />
+        <h1>Thông báo xác nhận lịch khám</h1>
+        <p class="message {{ activation_status }}">
+        <p>{{ message|safe }}
+        </p>
+
+        </p>
+
+        <a href="{{ home_url }}" class="btn-back">Về trang chủ</a>
+
+        <div class="footer">
+            Đây là email tự động từ Phòng Khám Đa Khoa, vui lòng không trả lời lại email này.<br>
+            Địa chỉ: 123 Đường ABC, Quận Cẩm Lệ, TP.Đà Nẵng | Hotline: 0388 529 096
+        </div>
+    </div>
+</body>
+
+</html>

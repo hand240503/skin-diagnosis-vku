@@ -1,0 +1,321 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Thêm bác sĩ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* CSS chung phần sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            height: calc(100vw - 50%);
+        }
+
+        .admin-name a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .btn-manage-users {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-manage-users:hover {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Phần CSS chung còn lại (body, content, form, ...) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 50px 40px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2d3d;
+            margin-bottom: 40px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* Cho input, select và file upload */
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.8px solid #ced4da;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        input[type="file"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        /* Label */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #34495e;
+        }
+
+        /* Nút submit chiếm hết chiều ngang, nhưng giới hạn max-width */
+        button[type="submit"] {
+            grid-column: 1 / -1;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            max-width: 300px;
+            justify-self: center;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #16222b;
+            transform: translateY(-1px);
+        }
+
+        .message {
+            text-align: center;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 20px 10px;
+            }
+
+            .admin-name a {
+                margin-bottom: 0;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Các lớp tiện ích có sẵn */
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1rem;
+        }
+
+        .form-select {
+            display: block;
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1.5px solid #ced4da;
+            border-radius: 0.5rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 6px rgba(52, 152, 219, 0.5);
+            outline: none;
+            color: #212529;
+        }
+
+        .form-select option {
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+    </div>
+
+    <div class="content">
+        <h1>Cập nhật bác sĩ</h1>
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+        <a href="{% url 'doctor_detail' doctor.id %}"
+            style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+            ← Quay lại chi tiết bác sĩ
+        </a>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div style="grid-column: span 2;">
+                    <label for="avatar">Ảnh đại diện: {% if doctor.avatar %}<br><img src="{{ doctor.avatar.url }}"
+                            alt="Ảnh đại diện" style="max-width:120px; margin-top:10px;">{% endif %}</label>
+                    <input type="file" name="avatar" id="avatar" accept="image/*">
+                </div>
+                <div>
+                    <label for="ten">Họ và tên:</label>
+                    <input type="text" name="ten" id="ten" required placeholder="vd: Nguyễn Văn A"
+                        value="{{ doctor.ten }}">
+                </div>
+                <div>
+                    <label for="tuoi">Tuổi:</label>
+                    <input type="number" name="tuoi" id="tuoi" required placeholder="vd: 35" min="0"
+                        value="{{ doctor.tuoi }}">
+                </div>
+
+
+                <div>
+                    <label for="hoc_vi">Học vị:</label>
+                    <input type="text" name="hoc_vi" id="hoc_vi" placeholder="vd: Tiến sĩ, Thạc sĩ..."
+                        value="{{ doctor.hoc_vi }}">
+                </div>
+                <div>
+                    <label for="kinh_nghiem">Kinh nghiệm (năm):</label>
+                    <input type="number" name="kinh_nghiem" id="kinh_nghiem" placeholder="vd: 10" min="0"
+                        value="{{ doctor.kinh_nghiem }}">
+                </div>
+                <div>
+                    <label for="chuc_vu">Chức vụ:</label>
+                    <input type="text" name="chuc_vu" id="chuc_vu" placeholder="vd: Trưởng khoa..."
+                        value="{{ doctor.chuc_vu }}">
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" required placeholder="vd: bacsi@example.com"
+                        value="{{ doctor.email }}">
+                </div>
+                <div>
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="text" name="phone" id="phone" required placeholder="vd: 0901234567"
+                        value="{{ doctor.phone }}">
+                </div>
+                <div>
+                    <label for="chuyen_khoa">Chuyên khoa:</label>
+                    <select name="chuyen_khoa" id="chuyen_khoa" class="form-select" required>
+                        <option value="" disabled>Chọn chuyên khoa</option>
+                        {% for ck in chuyen_khoa_list %}
+                        <option value="{{ ck.id }}" {% if doctor.chuyen_khoa.id|equals:ck.id %} selected {% endif %}>
+                            {{ ck.ten_chuyen_khoa }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <select name="is_activated" id="is_activated" class="form-select">
+                    <option value="True" {% if doctor.is_activated %} selected {% endif %}>Đã kích hoạt</option>
+                    <option value="False" {% if not doctor.is_activated %} selected {% endif %}>Chưa kích hoạt</option>
+                </select>
+
+
+                <button type="submit" style="margin-top: 30px;">Cập nhật bác sĩ</button>
+
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>

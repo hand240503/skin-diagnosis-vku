@@ -118,7 +118,7 @@ def activate_account(request, email):
     random_password = ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
     # Tạo user mới với username là email
-    user = User.objects.create_user(username=email, password=random_password)
+    user = User.objects.create_user(username=email, password=random_password,email=email)
     user.save()
 
     # Gán user vào profile và lưu

@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2c3e50" />
+    <title>Quản lý người dùng</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px !important;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-name a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .btn-manage-users {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-manage-users:hover {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 20px 10px;
+            }
+
+            .admin-name a {
+                margin-bottom: 0;
+            }
+        }
+
+
+        /* Main content */
+        .content {
+            flex: 1;
+            padding: 40px 30px;
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .btn-add-doctor {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 22px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add-doctor:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #ecf0f1;
+        }
+
+        th,
+        td {
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            border-right: 1px solid #dde6eb;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-right: none;
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover td {
+            background-color: #d1e7fd;
+            color: #0b3559;
+        }
+
+        tbody td:nth-child(even) {
+            background-color: #f9fbfc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .status.active {
+            background-color: #27ae60;
+        }
+
+        .status.inactive {
+            background-color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .admin-name {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .btn-manage-users {
+                width: auto;
+                padding: 10px 18px;
+                font-size: 0.9rem;
+                margin-bottom: 0;
+            }
+
+            .content {
+                padding: 20px 10px;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th,
+            td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+    </div>
+
+    <div class="content">
+        <!-- Nút thêm bác sĩ ở đây -->
+        <a href="{% url 'add_doctor' %}" class="btn-add-doctor">+ Thêm bác sĩ</a>
+
+        <h1>Danh sách bác sĩ</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Trạng Thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.id }}</td>
+                    <td>{{ doctor.ten }}</td>
+                    <td>{{ doctor.email }}</td>
+                    <td>{{ doctor.phone }}</td>
+                    <td>
+                        {% if doctor.is_activated == 1 %}
+                        <span class="status active">Đã kích hoạt</span>
+                        {% else %}
+                        <span class="status inactive">Chưa kích hoạt</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'doctor_detail' doctor.id %}" class="btn-manage-users"
+                            style="padding: 6px 12px; font-size: 0.85rem; border-radius: 20px;">
+                            Chi tiết
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #7f8c8d; font-style: italic;">Chưa có bác sĩ nào.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

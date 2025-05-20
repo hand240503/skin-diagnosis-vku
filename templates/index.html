@@ -64,13 +64,13 @@
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch Vụ</a>
             <div class="dropdown-menu m-0">
+              <a href="{% url 'tim_kiem_lich' %}" class="dropdown-item">Tìm kiếm lịch hẹn</a>
               {% if user.is_authenticated %}
               <a href="{% url 'lich_kham_nguoi_dung' %}" class="dropdown-item">Lịch Hẹn Của Bạn</a>
               <a href="{% url 'logout' %}" class="dropdown-item">Đăng Xuất</a>
               {% else %}
               <a href="{% url 'login' %}" class="dropdown-item">Đăng Nhập</a>
               {% endif %}
-              <a href="{% url 'tim_kiem_lich' %}" class="dropdown-item">Tìm kiếm lịch hẹn</a>
             </div>
           </div>
 

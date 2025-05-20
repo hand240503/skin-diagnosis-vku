@@ -1,0 +1,326 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2c3e50" />
+    <title>Chi tiết Bác sĩ</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Reset & body */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px !important;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-name a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .btn-manage-users {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-manage-users:hover {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 20px 10px;
+            }
+
+            .admin-name a {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Main content container */
+        .container {
+            flex: 1;
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .profile-avatar {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3498db;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #34495e;
+            width: 150px;
+            display: inline-block;
+        }
+
+        .value {
+            color: #2c3e50;
+        }
+
+        .status {
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+            display: inline-block;
+        }
+
+        .status.active {
+            background-color: #27ae60;
+        }
+
+        .status.inactive {
+            background-color: #e74c3c;
+        }
+
+        a.btn-back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 22px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        a.btn-back:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .admin-name {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .btn-manage-users {
+                width: auto;
+                padding: 10px 18px;
+                font-size: 0.9rem;
+                margin-bottom: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 20px 10px;
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+    </div>
+    <div class="container">
+        <h1>Thông tin bác sĩ</h1>
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div style="padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;
+                       {% if message.tags == 'success' %}
+                           background-color: #d4edda; color: #155724;
+                       {% elif message.tags == 'warning' %}
+                           background-color: #fff3cd; color: #856404;
+                       {% elif message.tags == 'error' %}
+                           background-color: #f8d7da; color: #721c24;
+                       {% else %}
+                           background-color: #cce5ff; color: #004085;
+                       {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if doctor.avatar %}
+        <img src="{{ doctor.avatar.url }}" alt="Avatar bác sĩ" class="profile-avatar" />
+        {% else %}
+        <img src="{% static 'default-avatar.png' %}" alt="Avatar mặc định" class="profile-avatar" />
+        {% endif %}
+
+        <div class="info-row">
+            <span class="label">Tên:</span>
+            <span class="value">{{ doctor.ten }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Email:</span>
+            <span class="value">{{ doctor.email }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Số điện thoại:</span>
+            <span class="value">{{ doctor.phone }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Chuyên khoa:</span>
+            <span class="value">
+                {% if doctor.chuyen_khoa %}
+                {{ doctor.chuyen_khoa.ten_chuyen_khoa }}
+                {% else %}
+                Chưa cập nhật
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Tuổi:</span>
+            <span class="value">{{ doctor.tuoi|default:"Chưa cập nhật" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Học vị:</span>
+            <span class="value">{{ doctor.hoc_vi|default:"Chưa cập nhật" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Kinh nghiệm:</span>
+            <span class="value">{{ doctor.kinh_nghiem|default:"Chưa cập nhật" }} năm</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Chức vụ:</span>
+            <span class="value">{{ doctor.chuc_vu|default:"Chưa cập nhật" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Trạng thái:</span>
+            {% if doctor.is_activated %}
+            <span class="status active">Đã kích hoạt</span>
+            {% else %}
+            <span class="status inactive">Chưa kích hoạt</span>
+            {% endif %}
+        </div>
+        {% if doctor.user  %}
+        <div class="info-row">
+            <span class="label">Tên đăng nhập:</span>
+            <span class="value">{{ doctor.user.username }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Mật khẩu:</span>
+            <span class="value">Đã cấp</span> <!-- Không nên hiển thị mật khẩu thật -->
+        </div>
+        {% endif %}
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 30px;">
+            {% if doctor.is_activated %}
+            {% if doctor.user %}
+            <!-- Đã có tài khoản, hiển thị nút Cấp lại mật khẩu -->
+            <a href="{% url 'reset_password' doctor.id %}" class="btn-manage-users"
+                style="background-color: #f39c12; color: white;">
+                Cấp lại mật khẩu
+            </a>
+            {% else %}
+            <!-- Chưa có tài khoản, hiển thị nút Cấp tài khoản -->
+            <a href="{% url 'cap_tai_khoan' doctor.id %}" class="btn-manage-users"
+                style="background-color: #2ecc71; color: white;">
+                Cấp tài khoản
+            </a>
+            {% endif %}
+            {% endif %}
+            <a href="{% url 'doctor_update' doctor.id %}" class="btn-manage-users">
+                Cập nhật thông tin
+            </a>
+        </div>
+
+
+        <a href="{% url 'doctors' %}" class="btn-back">← Quay lại danh sách</a>
+    </div>
+</body>
+
+</html>

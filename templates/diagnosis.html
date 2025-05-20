@@ -63,20 +63,18 @@
                             <li><a class="dropdown-item" href="{% url 'diagnosis_form' %}">Da Mặt</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="servicesDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Dịch Vụ
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                            <li><a class="dropdown-item" href="appointment.html">Appointment</a></li>
-                            <li><a class="dropdown-item" href="feature.html">Features</a></li>
-                            <li><a class="dropdown-item" href="blog.html">Our Blog</a></li>
-                            <li><a class="dropdown-item" href="team.html">Our Team</a></li>
-                            <li><a class="dropdown-item" href="testimonial.html">Testimonial</a></li>
-                            <li><a class="dropdown-item" href="404.html">404 Page</a></li>
-                        </ul>
-                    </li>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch Vụ</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{% url 'tim_kiem_lich' %}" class="dropdown-item">Tìm kiếm lịch hẹn</a>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'lich_kham_nguoi_dung' %}" class="dropdown-item">Lịch Hẹn Của Bạn</a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">Đăng Xuất</a>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="dropdown-item">Đăng Nhập</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </ul>
                 <a href="#" class="btn btn-primary rounded-pill px-4 py-2 ms-lg-3">Đặt Lịch Hẹn Với Bác Sĩ</a>
             </div>

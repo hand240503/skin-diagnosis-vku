@@ -1,0 +1,168 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2c3e50" />
+    <title>Chi tiết lịch khám</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+    <style>
+        body,
+        html {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .sidebar {
+            width: 260px !important;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .admin-name a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .btn-manage-users {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 30px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px 30px;
+        }
+
+        .detail-box {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .detail-box h2 {
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .status.active {
+            background-color: #27ae60;
+        }
+
+        .status.inactive {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body style="display: flex;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
+        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="detail-box">
+            <h2>Chi tiết lịch khám #{{ lich_kham.id }}</h2>
+            <div class="detail-row">
+                <div class="detail-label">Họ Tên:</div>
+                <div>{{ lich_kham.ho_ten }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Chuyên Khoa:</div>
+                <div>{{ lich_kham.chuyen_khoa }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Ngày Khám:</div>
+                <div>{{ lich_kham.ngay_kham|date:"d/m/Y" }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Buổi Khám:</div>
+                <div>{{ lich_kham.buoi_kham }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Trạng Thái:</div>
+                <div>
+                    {% if lich_kham.type == 0 %}
+                    <span class="status inactive">Chưa xác nhận</span>
+                    {% elif lich_kham.type == 1 %}
+                    <span class="status active">Đã xác nhận</span>
+                    {% else %}
+                    <span class="status inactive">Đã hủy</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Bác sĩ:</div>
+                <div>
+                    {% for doctor in lich_kham.doctors.all %}
+                    {{ doctor.ten }}<br />
+                    {% empty %}
+                    <i>Chưa gán bác sĩ</i>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'all_appointments' %}" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

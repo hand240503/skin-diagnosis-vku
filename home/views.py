@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 from django.conf import settings
+from accounts.models import UserProfile
+from chuyen_khoa.models import ChuyenKhoa
 
 def index(request):
     return render(request, 'index.html')
@@ -41,3 +43,18 @@ def chat_api(request):
             return JsonResponse({'reply': f"Lỗi khi gọi API Gemini: {str(e)}"}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def team(request):
+    chuyen_khoa_list = ChuyenKhoa.objects.all()
+    chuyen_khoa_id = request.GET.get('specialist')
+
+    doctors = UserProfile.objects.filter(type=1)
+    if chuyen_khoa_id:
+        doctors = doctors.filter(chuyen_khoa_id=chuyen_khoa_id)
+
+    return render(request, 'team.html', {
+        'chuyen_khoa_list': chuyen_khoa_list,
+        'doctors': doctors,
+        'selected_chuyen_khoa': chuyen_khoa_id
+    })
+

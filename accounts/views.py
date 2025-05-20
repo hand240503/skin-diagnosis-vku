@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+
+from appointment.models import LichKham
 from .models import User
 from .models import UserProfile
 from chuyen_khoa.models import ChuyenKhoa
@@ -7,25 +9,26 @@ import random
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-
+from django.shortcuts import render, get_object_or_404
 @login_required(login_url='/login/')
 def accounts(request):
     users = UserProfile.objects.filter(type=2)
     return render(request, 'accounts.html', {'users': users})
 
+@login_required(login_url='/login/')
 def doctors(request):
     doctors = UserProfile.objects.filter(type=1)
     return render(request, 'doctors.html', {'doctors': doctors})
 
-from django.shortcuts import render, get_object_or_404
 
+@login_required(login_url='/login/')
 def doctor_detail(request, id):
     doctor = get_object_or_404(UserProfile, id=id,type=1)
     context = {'doctor': doctor}
     return render(request, 'doctor_detail.html', context)
 
 
-
+@login_required(login_url='/login/')
 def add_doctor(request):
     chuyen_khoa_list = ChuyenKhoa.objects.all()
 
@@ -68,7 +71,7 @@ def add_doctor(request):
     return render(request, 'add_doctor.html', {'chuyen_khoa_list': chuyen_khoa_list})
 
 
-
+@login_required(login_url='/login/')
 def doctor_update(request, pk):
     doctor = get_object_or_404(UserProfile, pk=pk)
     chuyen_khoa_list = ChuyenKhoa.objects.all()
@@ -91,7 +94,7 @@ def doctor_update(request, pk):
         'chuyen_khoa_list': chuyen_khoa_list,
     })
 
-
+@login_required(login_url='/login/')
 def cap_tai_khoan(request, pk):
     doctor = get_object_or_404(UserProfile, pk=pk)
 
@@ -118,7 +121,7 @@ def cap_tai_khoan(request, pk):
 
     messages.success(request, f"Tài khoản đã được tạo. Mật khẩu: {password}")
     return redirect('doctor_detail', id=pk)
-
+@login_required(login_url='/login/')
 def reset_password(request, doctor_id):
     # Lấy doctor hoặc trả về 404 nếu không tồn tại
     doctor = get_object_or_404(UserProfile, id=doctor_id)
@@ -135,3 +138,25 @@ def reset_password(request, doctor_id):
 
     messages.success(request, f'Mật khẩu mới đã được cấp cho bác sĩ {doctor.ten}: {new_password}')
     return redirect('doctor_detail', id=doctor_id)
+
+def all_appointments(request):
+    status = request.GET.get('status')
+
+    lich_kham_list = LichKham.objects.all()
+
+    if status in ['0', '1', '2']:
+        lich_kham_list = lich_kham_list.filter(type=status)
+
+    lich_kham_list = lich_kham_list.order_by('ngay_kham').distinct()
+
+    return render(request, 'all_appointments.html', {
+        'lich_kham_list': lich_kham_list,
+        'request': request
+    })
+
+def appointment_detail(request, appointment_id):
+    lich_kham = get_object_or_404(LichKham, id=appointment_id)
+
+    return render(request, 'appointment_detail.html', {
+        'lich_kham': lich_kham
+    })

@@ -1,0 +1,334 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Đội Ngũ Bác Sĩ</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="" name="keywords" />
+  <meta content="" name="description" />
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <!-- Icon Font Stylesheet -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Libraries Stylesheet -->
+  <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet" />
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+
+  <!-- Template Stylesheet -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Spinner Start -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <!-- Spinner End -->
+
+  <!-- Navbar & Hero Start -->
+  <div class="container-fluid position-relative p-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white px-4 px-lg-5 py-3 py-lg-0">
+      <a href="" class="navbar-brand p-0">
+        <h1 class="text-primary m-0"><i class="fas fa-star-of-life me-3"></i>Phòng Khám</h1>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="fa fa-bars"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto py-0">
+          <a href="/" class="nav-item nav-link">Trang Chủ</a>
+          <a href="{% url 'teams' %}" class="nav-item nav-link active">Đội Ngũ Bác Sĩ</a>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Chẩn đoán bằng AI</a>
+            <div class="dropdown-menu m-0">
+              <a href="{% url 'diagnosis_form' %}" class="dropdown-item">Da Mặt</a>
+            </div>
+          </div>
+
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch Vụ</a>
+            <div class="dropdown-menu m-0">
+              <a href="{% url 'tim_kiem_lich' %}" class="dropdown-item">Tìm kiếm lịch hẹn</a>
+              {% if user.is_authenticated %}
+              <a href="{% url 'lich_kham_nguoi_dung' %}" class="dropdown-item">Lịch Hẹn Của Bạn</a>
+              <a href="{% url 'logout' %}" class="dropdown-item">Đăng Xuất</a>
+              {% else %}
+              <a href="{% url 'login' %}" class="dropdown-item">Đăng Nhập</a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Đặt lịch hẹn chuyển về ngay trước nút đăng nhập/đăng xuất -->
+        <div class="d-flex align-items-center gap-2 ms-3">
+          <a href="{% url 'them_lich_hen' %}" class="btn btn-outline-primary rounded-pill py-2 px-4">
+            Đặt Lịch Hẹn Với Bác Sĩ
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <!-- Navbar & Hero End -->
+
+  <!-- Team Start -->
+  <div class="container-fluid team py-5">
+    <div class="container py-5">
+      <div class="section-title mb-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="sub-style">
+          <h4 class="sub-title px-3 mb-0">Đội ngũ bác sĩ</h4>
+        </div>
+        <h1 class="display-3 mb-4">Đội ngũ chuyên gia y tế giàu kinh nghiệm và tận tâm.</h1>
+        <p class="mb-0">Chúng tôi tự hào có đội ngũ bác sĩ chuyên môn cao, luôn tận tâm và chu đáo trong việc chăm sóc
+          sức khỏe cho bạn. Với sự kết hợp giữa kiến thức chuyên sâu và kinh nghiệm thực tiễn, các bác sĩ luôn sẵn sàng
+          đồng hành cùng bạn trên hành trình điều trị và phục hồi.</p>
+      </div>
+      <form method="get" action="">
+        <div class="row justify-content-start g-3 mt-0 mb-2">
+          <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+            <label for="specialist" class="form-label mb-0">Chuyên khoa <span class="text-danger">*</span></label>
+            <select class="form-select select2" id="specialist" name="specialist" aria-label="Chuyên khoa"
+              onchange="this.form.submit()">
+              <option value="" {% if not selected_chuyen_khoa %}selected{% endif %}>-- Chọn chuyên khoa --</option>
+              {% for ck in chuyen_khoa_list %}
+              <option value="{{ ck.id }}" {% if ck.id|equals_str:selected_chuyen_khoa %}selected{% endif %}>
+                {{ ck.ten_chuyen_khoa }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <div class="row g-4">
+        {% for doctor in doctors %}
+        <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="team-item rounded">
+            <div class="team-img rounded-top h-100">
+              {% if doctor.avatar %}
+              <img src="{{ doctor.avatar.url }}" class="img-fluid rounded-top w-100" alt="{{ doctor.ten }}" />
+              {% else %}
+              <img src="{% static 'img/team-1.jpg' %}" class="img-fluid rounded-top w-100" alt="{{ doctor.ten }}" />
+              {% endif %}
+              <div class="team-icon d-flex justify-content-center">
+                <a href="" class="btn btn-primary mx-1 px-3">
+                  Đặt lịch khám
+                </a>
+
+              </div>
+            </div>
+            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+              <h5>{{ doctor.ten }}</h5>
+              <p class="mb-0">{{ doctor.chuc_vu }} - {{ doctor.chuyen_khoa.ten_chuyen_khoa }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!-- Team End -->
+
+  <!-- Footer Start -->
+  <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="footer-item d-flex flex-column">
+            <h4 class="text-white mb-4"><i class="fas fa-star-of-life me-3"></i>Phòng Khám</h4>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus dolorem impedit eos autem dolores
+              laudantium quia, qui similique</p>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-share fa-2x text-white me-2"></i>
+              <a class="btn-square btn btn-primary text-white rounded-circle mx-1" href=""><i
+                  class="fab fa-facebook-f"></i></a>
+              <a class="btn-square btn btn-primary text-white rounded-circle mx-1" href=""><i
+                  class="fab fa-twitter"></i></a>
+              <a class="btn-square btn btn-primary text-white rounded-circle mx-1" href=""><i
+                  class="fab fa-instagram"></i></a>
+              <a class="btn-square btn btn-primary text-white rounded-circle mx-1" href=""><i
+                  class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="footer-item d-flex flex-column">
+            <h4 class="mb-4 text-white">Quick Links</h4>
+            <a href=""><i class="fas fa-angle-right me-2"></i> About Us</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Terms & Conditions</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Our Blog & News</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Our Team</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="footer-item d-flex flex-column">
+            <h4 class="mb-4 text-white">Terapia Services</h4>
+            <a href=""><i class="fas fa-angle-right me-2"></i> All Services</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Physiotherapy</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Diagnostics</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Manual Therapy</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Massage Therapy</a>
+            <a href=""><i class="fas fa-angle-right me-2"></i> Rehabilitation</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="footer-item d-flex flex-column">
+            <h4 class="mb-4 text-white">Contact Info</h4>
+            <a href=""><i class="fa fa-map-marker-alt me-2"></i> 123 Street, New York, USA</a>
+            <a href=""><i class="fas fa-envelope me-2"></i> info@example.com</a>
+            <a href=""><i class="fas fa-envelope me-2"></i> info@example.com</a>
+            <a href=""><i class="fas fa-phone me-2"></i> +012 345 67890</a>
+            <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +012 345 67890</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer End -->
+  <!-- Back to Top -->
+  <!-- <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a> -->
+  <!-- Nút mở form -->
+  <button id="openChatBtn"
+    class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow text-center d-none"
+    style="width: 60px; height: 60px; z-index:1050; line-height: 60px; padding: 0;"><i
+      class="fas fa-comments fa-lg text-white"></i></button>
+
+  <div id="chatBox" class="shadow-lg bg-white rounded d-flex flex-column"
+    style="width: 360px; height: 480px; position: fixed; bottom: 80px; right: 20px; z-index: 1050; display: none;">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+      <h5 class="mb-0 text-primary">Chat với AI Gemini</h5>
+      <button type="button" class="btn-close" aria-label="Close" id="closeChatBtn"></button>
+    </div>
+
+    <div id="messages" class="flex-grow-1 overflow-auto p-3" style="background: #f8f9fa;"></div>
+
+    <form id="chatForm" class="d-flex p-3 border-top" autocomplete="off">
+      <input type="text" id="msgInput" class="form-control me-2" placeholder="Nhập tin nhắn..." required />
+      <button type="submit" class="btn btn-primary">Gửi</button>
+    </form>
+  </div>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+  <!-- Template Javascript -->
+  <script src="{% static 'js/main.js' %}"></script>
+  <script>
+    const openBtn = document.getElementById('openChatBtn')
+    const closeBtn = document.getElementById('closeChatBtn')
+    const chatBox = document.getElementById('chatBox')
+    const messages = document.getElementById('messages')
+    const chatForm = document.getElementById('chatForm')
+    const msgInput = document.getElementById('msgInput')
+
+    openBtn.addEventListener('click', () => {
+      chatBox.classList.remove('d-none')
+      chatBox.classList.add('d-flex')
+      openBtn.classList.add('d-none')
+      msgInput.focus()
+    })
+
+    // Khi nhấn nút đóng chat, ẩn khung chat và hiện lại nút mở
+    closeBtn.addEventListener('click', () => {
+      chatBox.classList.remove('d-flex')
+      chatBox.classList.add('d-none')
+      openBtn.classList.remove('d-none')
+    })
+
+    function appendMessage(text, sender) {
+      const div = document.createElement('div')
+      div.classList.add('mb-2', 'p-2', 'rounded')
+      if (sender === 'user') {
+        div.classList.add('bg-primary', 'text-white', 'text-end')
+      } else {
+        div.classList.add('bg-light', 'text-dark', 'text-start')
+      }
+      div.textContent = text
+      messages.appendChild(div)
+      messages.scrollTop = messages.scrollHeight
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const userMsg = msgInput.value.trim()
+      if (!userMsg) return
+
+      appendMessage(userMsg, 'user')
+      msgInput.value = ''
+
+      try {
+        const res = await fetch("{% url 'chat_api' %}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: new URLSearchParams({ message: userMsg })
+        })
+
+        const data = await res.json()
+
+        // Xử lý trả về: nếu data.reply là object thì lấy trường text nếu có, hoặc stringify
+        let replyText = ''
+        if (typeof data.reply === 'string') {
+          replyText = data.reply
+        } else if (typeof data.reply === 'object' && data.reply !== null) {
+          // Cố gắng lấy text từ cấu trúc dự đoán của Gemini
+          if (data.reply.parts && Array.isArray(data.reply.parts) && data.reply.parts.length > 0) {
+            replyText = data.reply.parts[0].text || JSON.stringify(data.reply)
+          } else {
+            replyText = JSON.stringify(data.reply)
+          }
+        } else {
+          replyText = 'Không có phản hồi'
+        }
+
+        appendMessage(replyText, 'bot')
+      } catch (error) {
+        appendMessage('Lỗi kết nối server', 'bot')
+      }
+    })
+
+    function getCookie(name) {
+      let cookieValue = null
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';')
+        for (let cookie of cookies) {
+          cookie = cookie.trim()
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.slice(name.length + 1))
+            break
+          }
+        }
+      }
+      return cookieValue
+    }
+  </script>
+</body>
+
+</html>

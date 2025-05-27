@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Thêm bệnh án</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* CSS giống file bác sĩ */
+        .sidebar {
+            width: 260px;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            height: 110vw;
+        }
+
+        .admin-name a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .btn-manage-users {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-manage-users:hover {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 50px 40px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2d3d;
+            margin-bottom: 40px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.8px solid #ced4da;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+            outline: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #34495e;
+        }
+
+        button[type="submit"] {
+            grid-column: 1 / -1;
+            background-color: #1f2d3d;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            max-width: 300px;
+            justify-self: center;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #16222b;
+            transform: translateY(-1px);
+        }
+
+        .message {
+            text-align: center;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 20px 10px;
+            }
+
+            .admin-name a {
+                margin-bottom: 0;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        {% endif %}
+        <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
+        <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage">Quản lý bệnh án</a>
+        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+    </div>
+
+    <div class="content">
+        <h1>Thêm bệnh án</h1>
+
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                <label for="ten_benh_nhan">Tên bệnh nhân:</label>
+                <input type="text" id="ten_benh_nhan" name="ten_benh_nhan" value="{{ lich_kham.ho_ten }}" readonly>
+            </div>
+
+            <div>
+                <label for="bac_si">Bác sĩ phụ trách:</label>
+                <select id="bac_si" name="bac_si" required>
+                    <option value="" selected>Chọn bác sĩ</option>
+                    {% for doctor in list_user_profile_bacsi %}
+                    <option value="{{ doctor.id }}">
+                        {{ doctor.ten|default:doctor.user.get_full_name|default:doctor.user.username }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="ngay_kham">Ngày khám:</label>
+                <input type="date" id="ngay_kham" name="ngay_kham" required value="{{ today }}">
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="chuan_doan">Chẩn đoán:</label>
+                <textarea id="chuan_doan" name="chuan_doan" rows="4" placeholder="Mô tả chẩn đoán" required></textarea>
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="ghi_chu">Mô tả thêm:</label>
+                <textarea id="ghi_chu" name="ghi_chu" rows="4" placeholder="Thông tin thêm (nếu có)"></textarea>
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="trieu_chung">Triệu chứng:</label>
+                <textarea id="trieu_chung" name="trieu_chung" rows="4" placeholder="Mô tả triệu chứng"></textarea>
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="ket_qua_xet_nghiem">Kết quả xét nghiệm:</label>
+                <textarea id="ket_qua_xet_nghiem" name="ket_qua_xet_nghiem" rows="4"
+                    placeholder="Mô tả kết quả xét nghiệm"></textarea>
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="don_thuoc">Đơn thuốc:</label>
+                <textarea id="don_thuoc" name="don_thuoc" rows="4" placeholder="Đơn thuốc kê"></textarea>
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label for="chi_tiet_ghi_chu">Ghi chú chi tiết:</label>
+                <textarea id="chi_tiet_ghi_chu" name="chi_tiet_ghi_chu" rows="4" placeholder="Ghi chú thêm"></textarea>
+            </div>
+            <div>
+                <label for="anh_benh_an">Ảnh bệnh án:</label>
+                <input type="file" name="anh_benh_an" accept="image/*" />
+            </div>
+
+            <button type="submit" style="margin-top: 30px;">Thêm bệnh án</button>
+        </form>
+
+    </div>
+</body>
+
+</html>

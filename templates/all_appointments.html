@@ -234,9 +234,12 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        {% if request.user.is_superuser %}
         <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
         <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        {% endif %}
         <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
+        <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage-users">Quản lý bệnh án</a>
         <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
     </div>
 
@@ -291,9 +294,12 @@
                         {% endfor %}
                     </td>
                     <td>
+                        {% if request.user.is_authenticated and request.user.userprofile.type == 1 %}
+                        <a href="{% url 'tao_benh_an' lich.id %}" class="btn btn-success btn-sm">Tạo bệnh án</a>
+                        {% else %}
                         <a href="{% url 'appointment_detail' lich.id %}" class="btn btn-primary btn-sm">Điều chỉnh</a>
+                        {% endif %}
                     </td>
-
 
                 </tr>
                 {% empty %}

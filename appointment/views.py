@@ -4,12 +4,15 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, send_mail
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from appointment.forms import BenhAnDetailForm
+
 from .models import LichKham
+from appointment.models import BenhAn
 from chuyen_khoa.models import ChuyenKhoa
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -329,3 +332,73 @@ def huy_lich_kham(request, lich_id):
 
     return redirect('lich_kham_nguoi_dung')
 
+@login_required
+def all_benh_an_view(request):
+    user = request.user
+
+    # Chỉ lấy bệnh án mà user là bệnh nhân
+    qs = BenhAn.objects.filter(benh_nhan_id=user.id)
+
+    # Tối ưu truy vấn
+    qs = (
+        qs.select_related("benh_nhan")
+          .select_related("bac_si", "bac_si__user")
+          .order_by("-id")
+    )
+
+    # Gắn thông tin hiển thị cho từng bệnh án
+    for ba in qs:
+        # Profile bệnh nhân
+        ba.benh_nhan_profile = getattr(ba.benh_nhan, "userprofile", None)
+
+        # Profile bác sĩ (đã là UserProfile)
+        ba.bac_si_profile = ba.bac_si
+
+        # Tên hiển thị bệnh nhân
+        ba.bn_display_name = (
+            ba.benh_nhan_profile.ten
+            if ba.benh_nhan_profile and ba.benh_nhan_profile.ten
+            else ba.benh_nhan.get_full_name() or ba.benh_nhan.username
+        )
+
+        # Tên hiển thị bác sĩ
+        ba.bs_display_name = (
+            ba.bac_si_profile.ten
+            if ba.bac_si_profile and ba.bac_si_profile.ten
+            else ba.bac_si_profile.user.get_full_name() or ba.bac_si_profile.user.username
+        )
+
+    return render(
+        request,
+        "list_benh_an_user.html",
+        {"benh_an_list": qs},
+    )
+
+def chi_tiet_benh_an_view(request, benh_an_id):
+
+    benh_an = get_object_or_404(
+        BenhAn.objects.select_related("benh_nhan", "bac_si", "bac_si__user"),
+        id=benh_an_id
+    )
+
+    chi_tiet_benh_an_list = benh_an.chi_tiet.all()
+
+    benh_an.benh_nhan_profile = getattr(benh_an.benh_nhan, "userprofile", None)
+    benh_an.bac_si_profile = benh_an.bac_si
+
+    benh_an.bn_display_name = (
+        benh_an.benh_nhan_profile.ten
+        if benh_an.benh_nhan_profile and benh_an.benh_nhan_profile.ten
+        else benh_an.benh_nhan.get_full_name() or benh_an.benh_nhan.username
+    )
+
+    benh_an.bs_display_name = (
+        benh_an.bac_si_profile.ten
+        if benh_an.bac_si_profile and benh_an.bac_si_profile.ten
+        else benh_an.bac_si_profile.user.get_full_name() or benh_an.bac_si_profile.user.username
+    )
+
+    return render(request, 'benh_an_user.html', {
+        'benh_an': benh_an,
+        'chi_tiet_benh_an_list': chi_tiet_benh_an_list,
+    })

@@ -1,6 +1,9 @@
 import uuid
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import render
+from appointment.models import BenhAn
 from chuyen_khoa.models import ChuyenKhoa
 class UserProfile(models.Model):
     USER_TYPES = (
@@ -35,6 +38,8 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.get_type_display()}"
 
+    def get_display_name(self):
+        return self.ten or self.user.get_full_name() or self.user.username
     class Meta:
         db_table = 'user_profile'
 

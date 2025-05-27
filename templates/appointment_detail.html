@@ -103,6 +103,10 @@
         .status.inactive {
             background-color: #e74c3c;
         }
+
+        .form-group label {
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -110,9 +114,12 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        {% if request.user.is_superuser %}
         <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
         <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        {% endif %}
         <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
+        <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage">Quản lý bệnh án</a>
         <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
     </div>
 
@@ -120,6 +127,15 @@
     <div class="content">
         <div class="detail-box">
             <h2>Chi tiết lịch khám #{{ lich_kham.id }}</h2>
+
+            {% if messages %}
+            <div class="mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <div class="detail-row">
                 <div class="detail-label">Họ Tên:</div>
                 <div>{{ lich_kham.ho_ten }}</div>
@@ -158,6 +174,26 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="detail-row" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                <div class="detail-label">Cập nhật trạng thái:</div>
+                <form method="post" action="{% url 'update_appointment_status' appointment_id=lich_kham.id %}"
+                    style="display: flex; flex-direction: column; gap: 10px;">
+                    {% csrf_token %}
+                    <select name="status" id="status" class="form-control" style="width: 200px;">
+                        <option value="0" {% if lich_kham.type|equals:0 %}selected{% endif %}>Chưa xác nhận</option>
+                        <option value="1" {% if lich_kham.type|equals:1 %}selected{% endif %}>Đã xác nhận</option>
+                        <option value="2" {% if lich_kham.type|equals:2 %}selected{% endif %}>Đã hủy</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary" style="width: fit-content;">Cập nhật trạng
+                        thái</button>
+                </form>
+            </div>
+            <a href="{% url 'assign_doctor' appointment_id=lich_kham.id %}" class="btn btn-warning"
+                style="width: fit-content;">
+                Phân công bác sĩ
+            </a>
+
+
             <div class="text-center mt-4">
                 <a href="{% url 'all_appointments' %}" class="btn btn-secondary">Quay lại</a>
             </div>

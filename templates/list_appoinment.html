@@ -50,7 +50,7 @@
                                 </td>
                                 <td>
                                     {% if lich.type == 1 %}
-                                    <a href="" class="btn btn-info btn-sm">Chi tiết</a>
+                                    <a href="{% url 'benh_an_cua_toi' %}" class="btn btn-info btn-sm">Xem bệnh án</a>
                                     {% elif lich.type == 0 %}
                                     <form action="{% url 'huy_lich_hen' lich.id %}" method="post"
                                         style="display:inline;">

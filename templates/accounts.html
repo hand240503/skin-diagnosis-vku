@@ -203,9 +203,12 @@
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+    {% if request.user.is_superuser %}
     <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
     <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+    {% endif %}
     <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
+    <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage-users">Quản lý bệnh án</a>
     <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
   </div>
 
@@ -226,13 +229,13 @@
       </thead>
       <tbody>
         {% for user in users %}
-        <tr>
+        <tr {% if not user.is_activated %} class="click-to-activate" data-email="{{ user.email }}" {% endif %}>
           <td>{{ user.id }}</td>
           <td>{{ user.ten }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.phone }}</td>
           <td>
-            {% if user.type == 0%}
+            {% if user.type == 0 %}
             Quản trị viên
             {% elif user.type == 2 %}
             Bệnh nhân
@@ -252,12 +255,28 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6" style="text-align: center; color: #7f8c8d; font-style: italic;">Chưa có người dùng nào.</td>
+          <td colspan="6" style="text-align: center; color: #7f8c8d; font-style: italic;">
+            Chưa có người dùng nào.
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const rows = document.querySelectorAll(".click-to-activate");
+
+      rows.forEach(row => {
+        row.addEventListener("dblclick", function () {
+          const email = this.getAttribute("data-email");
+          if (confirm(`Bạn có chắc chắn muốn kích hoạt tài khoản với email: ${email}?`)) {
+            window.location.href = `/accounts/create-user/?email=${encodeURIComponent(email)}`;
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

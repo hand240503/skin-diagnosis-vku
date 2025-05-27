@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Phân công bác sĩ - Lịch khám #{{ lich_kham.id }}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container mt-5" style="max-width: 600px;">
+        <h2>Phân công bác sĩ cho lịch khám #{{ lich_kham.id }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">Lưu phân công</button>
+            <a href="{% url 'appointment_detail' appointment_id=lich_kham.id %}" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+</body>
+
+</html>

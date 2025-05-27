@@ -30,7 +30,7 @@ def login_view(request):
                 if profile.type == 2:
                     return redirect('index')
                 elif profile.type == 1:
-                    return redirect('accounts')
+                    return redirect('all_appointments')
                 else:
                     return redirect('index')
             except UserProfile.DoesNotExist:

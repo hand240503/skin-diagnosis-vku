@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#2c3e50" />
-    <title>Quản lý người dùng</title>
+    <title>Quản lý bệnh án</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
@@ -41,6 +41,7 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
 
         .admin-name a {
@@ -49,9 +50,10 @@
             color: white;
             text-decoration: none;
             margin-bottom: 60px;
+            user-select: none;
         }
 
-        .btn-manage-users {
+        .btn-manage {
             display: block;
             width: 100%;
             max-width: 220px;
@@ -66,27 +68,14 @@
             border-radius: 30px;
             transition: 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            user-select: none;
         }
 
-        .btn-manage-users:hover {
+        .btn-manage:hover {
             background-color: #3498db;
             color: white;
             box-shadow: 0 6px 14px rgba(52, 152, 219, 0.5);
         }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-around;
-                padding: 20px 10px;
-            }
-
-            .admin-name a {
-                margin-bottom: 0;
-            }
-        }
-
 
         /* Main content */
         .content {
@@ -99,23 +88,8 @@
             text-align: center;
             font-weight: 600;
             margin-bottom: 30px;
-        }
-
-        .btn-add-doctor {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 12px 22px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5);
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-add-doctor:hover {
-            background-color: #2980b9;
+            color: #1f2d3d;
+            user-select: none;
         }
 
         table {
@@ -129,24 +103,29 @@
         }
 
         thead {
-            background-color: #ecf0f1;
+            background-color: #1f2d3d;
+            color: white;
         }
 
         th,
         td {
             padding: 16px 20px;
-            text-align: center;
+            text-align: left;
             font-size: 0.95rem;
             border-right: 1px solid #dde6eb;
+            vertical-align: middle;
         }
 
         th:last-child,
         td:last-child {
             border-right: none;
+            text-align: center;
         }
 
         tbody tr {
             transition: background-color 0.3s ease;
+            background-color: white;
+            border-radius: 8px;
         }
 
         tbody tr:hover td {
@@ -158,21 +137,22 @@
             background-color: #f9fbfc;
         }
 
-        .status {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        a.detail-link {
+            color: #3498db;
+            text-decoration: none;
             font-weight: 600;
-            color: #fff;
         }
 
-        .status.active {
-            background-color: #27ae60;
+        a.detail-link:hover {
+            text-decoration: underline;
         }
 
-        .status.inactive {
-            background-color: #e74c3c;
+        /* Khi không có dữ liệu */
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            padding: 20px;
         }
 
         @media (max-width: 768px) {
@@ -183,9 +163,8 @@
             .sidebar {
                 width: 100%;
                 flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px;
+                justify-content: space-around;
+                padding: 20px 10px;
             }
 
             .admin-name {
@@ -193,7 +172,7 @@
                 margin-bottom: 0;
             }
 
-            .btn-manage-users {
+            .btn-manage {
                 width: auto;
                 padding: 10px 18px;
                 font-size: 0.9rem;
@@ -220,58 +199,50 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
-        <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
-        <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
-        <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
-        <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage-users">Quản lý bệnh án</a>
-        <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'accounts' %}" class="btn-manage">Quản lý khách hàng</a>
+        <a href="{% url 'doctors' %}" class="btn-manage">Quản lý bác sĩ</a>
+        {% endif %}
+        <a href="{% url 'all_appointments' %}" class="btn-manage">Quản lý lịch khám</a>
+        <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage">Quản lý bệnh án</a>
+        <a href="{% url 'logout' %}" class="btn-manage">Đăng xuất</a>
     </div>
 
     <div class="content">
-        <!-- Nút thêm bác sĩ ở đây -->
-        <a href="{% url 'add_doctor' %}" class="btn-add-doctor">+ Thêm bác sĩ</a>
+        <h1>Danh sách bệnh án</h1>
 
-        <h1>Danh sách bác sĩ</h1>
+        {% if benh_an_list %}
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Trạng Thái</th>
+                    <th>Bệnh nhân</th>
+                    <th>Bác sĩ phụ trách</th>
+                    <th>Ngày khám</th>
+                    <th>Chẩn đoán</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
             <tbody>
-                {% for doctor in doctors %}
+                {% for ba in benh_an_list %}
                 <tr>
-                    <td>{{ doctor.id }}</td>
-                    <td>{{ doctor.ten }}</td>
-                    <td>{{ doctor.email }}</td>
-                    <td>{{ doctor.phone }}</td>
-                    <td>
-                        {% if doctor.is_activated == 1 %}
-                        <span class="status active">Đã kích hoạt</span>
-                        {% else %}
-                        <span class="status inactive">Chưa kích hoạt</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'doctor_detail' doctor.id %}" class="btn-manage-users"
-                            style="padding: 6px 12px; font-size: 0.85rem; border-radius: 20px;">
-                            Chi tiết
-                        </a>
-                    </td>
+                    <td>{{ ba.id }}</td>
+                    <td>{{ ba.bn_display_name }}</td>
+                    <td>{{ ba.bs_display_name }}</td>
+                    <td>{{ ba.ngay_kham }}</td>
+                    <td>{{ ba.chuan_doan|truncatechars:40 }}</td>
+                    <td><a href="{% url 'benh_an_detail' ba.id %}" class="detail-link">Xem</a></td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; color: #7f8c8d; font-style: italic;">Chưa có bác sĩ nào.
-                    </td>
+                    <td colspan="6" class="no-data">Chưa có bệnh án.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p class="no-data">Chưa có bệnh án nào.</p>
+        {% endif %}
     </div>
 </body>
 

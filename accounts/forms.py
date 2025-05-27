@@ -12,3 +12,11 @@ class DoctorForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['ten', 'email', 'phone', 'chuyen_khoa', 'tuoi', 'hoc_vi', 'kinh_nghiem', 'chuc_vu', 'is_activated', 'avatar']
+
+class AssignDoctorForm(forms.Form):
+    doctors = forms.ModelMultipleChoiceField(
+        queryset=UserProfile.objects.filter(type=1),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='Chọn bác sĩ'
+    )

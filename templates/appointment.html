@@ -35,6 +35,11 @@
                                 {% endfor %}
                             </select>
                         </div>
+                        {% if bac_si_phu_trach %}
+                        <small class="form-text text-muted mt-1">
+                            Bác sĩ phụ trách: <strong>{{ bac_si_phu_trach.ten }}</strong>
+                        </small>
+                        {% endif %}
                         <div class="mb-3">
                             <label for="ngay_kham" class="form-label">Ngày Khám</label>
                             <input type="date" class="form-control" id="ngay_kham" name="ngay_kham" required>

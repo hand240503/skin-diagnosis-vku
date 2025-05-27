@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#2c3e50" />
-    <title>Quản lý người dùng</title>
+    <title>Chi tiết bệnh án</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
@@ -93,86 +93,48 @@
             flex: 1;
             padding: 40px 30px;
             overflow-x: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin: 30px;
         }
 
         h1 {
             text-align: center;
             font-weight: 600;
             margin-bottom: 30px;
+            color: #1f2d3d;
         }
 
-        .btn-add-doctor {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 12px 22px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5);
-            transition: background-color 0.3s ease;
+        .benh-an-info,
+        .chi-tiet-benh-an {
+            margin-bottom: 30px;
         }
 
-        .btn-add-doctor:hover {
-            background-color: #2980b9;
+        .benh-an-info p,
+        .chi-tiet-benh-an p {
+            font-size: 1rem;
+            margin: 8px 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 12px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        .field-label {
+            font-weight: 700;
+            color: #34495e;
+        }
+
+        .chi-tiet-benh-an {
+            background: #f9fbfc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 5px #d1e7fd;
+        }
+
+        .chi-tiet-benh-an img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
             border-radius: 8px;
-            overflow: hidden;
-        }
-
-        thead {
-            background-color: #ecf0f1;
-        }
-
-        th,
-        td {
-            padding: 16px 20px;
-            text-align: center;
-            font-size: 0.95rem;
-            border-right: 1px solid #dde6eb;
-        }
-
-        th:last-child,
-        td:last-child {
-            border-right: none;
-        }
-
-        tbody tr {
-            transition: background-color 0.3s ease;
-        }
-
-        tbody tr:hover td {
-            background-color: #d1e7fd;
-            color: #0b3559;
-        }
-
-        tbody td:nth-child(even) {
-            background-color: #f9fbfc;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .status.active {
-            background-color: #27ae60;
-        }
-
-        .status.inactive {
-            background-color: #e74c3c;
+            border: 1px solid #ccc;
         }
 
         @media (max-width: 768px) {
@@ -202,16 +164,40 @@
 
             .content {
                 padding: 20px 10px;
+                margin: 15px;
             }
+        }
 
-            table {
-                font-size: 0.9rem;
-            }
+        .btn-back {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
 
-            th,
-            td {
-                padding: 10px 8px;
-            }
+        .btn-back:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-add-detail {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add-detail:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -220,58 +206,50 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="admin-name"><a href="{% url 'accounts' %}">ADMIN</a></div>
+        {% if request.user.is_superuser %}
         <a href="{% url 'accounts' %}" class="btn-manage-users">Quản lý khách hàng</a>
         <a href="{% url 'doctors' %}" class="btn-manage-users">Quản lý bác sĩ</a>
+        {% endif %}
         <a href="{% url 'all_appointments' %}" class="btn-manage-users">Quản lý lịch khám</a>
         <a href="{% url 'danh_sach_benh_an' %}" class="btn-manage-users">Quản lý bệnh án</a>
         <a href="{% url 'logout' %}" class="btn-manage-users">Đăng xuất</a>
     </div>
 
+    <!-- Main content -->
     <div class="content">
-        <!-- Nút thêm bác sĩ ở đây -->
-        <a href="{% url 'add_doctor' %}" class="btn-add-doctor">+ Thêm bác sĩ</a>
+        <h1>Chi tiết bệnh án</h1>
+        <button class="btn-back" onclick="window.history.back()">← Quay lại</button>
+        <a href="{% url 'add_benh_an_detail' benh_an.id %}" class="btn-manage-users">Thêm bệnh án chi tiết</a>
 
-        <h1>Danh sách bác sĩ</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Trạng Thái</th>
-                    <th>Chi tiết</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for doctor in doctors %}
-                <tr>
-                    <td>{{ doctor.id }}</td>
-                    <td>{{ doctor.ten }}</td>
-                    <td>{{ doctor.email }}</td>
-                    <td>{{ doctor.phone }}</td>
-                    <td>
-                        {% if doctor.is_activated == 1 %}
-                        <span class="status active">Đã kích hoạt</span>
-                        {% else %}
-                        <span class="status inactive">Chưa kích hoạt</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'doctor_detail' doctor.id %}" class="btn-manage-users"
-                            style="padding: 6px 12px; font-size: 0.85rem; border-radius: 20px;">
-                            Chi tiết
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" style="text-align: center; color: #7f8c8d; font-style: italic;">Chưa có bác sĩ nào.
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <div class="benh-an-info">
+            <p><strong>Bệnh nhân:</strong> {{ benh_an.bn_display_name }}</p>
+            <p><strong>Bác sĩ phụ trách:</strong> {{ benh_an.bs_display_name }}</p>
+            <p><strong>Ngày khám:</strong> {{ benh_an.ngay_kham }}</p>
+            <p><strong>Chuẩn đoán:</strong> {{ benh_an.chuan_doan }}</p>
+            <p><strong>Ghi chú:</strong> {{ benh_an.ghi_chu|default:"Không có" }}</p>
+        </div>
+
+        <h2>Chi tiết bệnh án</h2>
+
+        {% if chi_tiet_benh_an_list %}
+        {% for ct in chi_tiet_benh_an_list %}
+        <div class="chi-tiet-benh-an">
+            <p><span class="field-label">Triệu chứng:</span> {{ ct.trieu_chung|default:"Không có" }}</p>
+            <p><span class="field-label">Kết quả xét nghiệm:</span> {{ ct.ket_qua_xet_nghiem|default:"Không có" }}</p>
+            <p><span class="field-label">Đơn thuốc:</span> {{ ct.don_thuoc|default:"Không có" }}</p>
+            <p><span class="field-label">Ghi chú chi tiết:</span> {{ ct.ghi_chu|default:"Không có" }}</p>
+            {% if ct.anh_benh_an %}
+            <div>
+                <span class="field-label">Ảnh bệnh án:</span><br />
+                <img src="{{ ct.anh_benh_an.url }}" alt="Ảnh bệnh án" />
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>Chưa có chi tiết bệnh án nào.</p>
+        {% endif %}
     </div>
 </body>
 
